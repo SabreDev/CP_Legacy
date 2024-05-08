@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#pragma GCC target("popcnt")
 using namespace std;
 #define fast ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define ll long long
@@ -16,27 +17,32 @@ using namespace std;
 #define rrng(i,a,b) for(int i=a;i>b;--i)
 #define ar array
 
-void run_case() {
-	// bitset<10> x[100];
-	
-	// x[0] = 30;
-	// x[1] = 55;
-	// cout << (x[0] ^ x[1]) << "\n";
+//Problem link: https://cses.fi/problemset/task/2137/
+//Note: popcnt pragma replaces builtin popocount with machine instruction hence speeding up the runtime of count function of bitset.
 
-	bitset<100000> x; // 16 bytes
-	// 4*(10/W)
-	// 8*(10/64) = 8 bytes
-	// 8*(66/64)
-	// rep(i,5){
-	// 	int a;
-	// 	cin >> a;
-	// 	x[a]=true;
-	// }
-	// cout << sizeof(x) << "\n";
-	bitset<10> a[10][20];
+const int maxN = 3001;
+
+//Memory: O(ceil((maxN * sz)/W)*(W/8))
+
+bitset<maxN> grid[maxN];
+
+void run_case() {
+	int n;
+	cin >> n;
+	rep(i,n)
+		cin >> grid[i];
 	
-	a[0][1] = 1;
-	cout << a[0][1] << "\n";
+	ll ans = 0;
+	rep(i,n){
+		rng(j,i+1,n){
+			if(i==j)
+				continue;
+			int cnt = (grid[i]&grid[j]).count();
+			ans+=(cnt*(cnt-1))/2;
+		}
+	}
+
+	cout << ans << '\n';
 }
  
 int main() {

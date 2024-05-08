@@ -16,27 +16,37 @@ using namespace std;
 #define rrng(i,a,b) for(int i=a;i>b;--i)
 #define ar array
 
-void run_case() {
-	// bitset<10> x[100];
-	
-	// x[0] = 30;
-	// x[1] = 55;
-	// cout << (x[0] ^ x[1]) << "\n";
+//Problem link: https://codeforces.com/problemset/problem/235/A
 
-	bitset<100000> x; // 16 bytes
-	// 4*(10/W)
-	// 8*(10/64) = 8 bytes
-	// 8*(66/64)
-	// rep(i,5){
-	// 	int a;
-	// 	cin >> a;
-	// 	x[a]=true;
-	// }
-	// cout << sizeof(x) << "\n";
-	bitset<10> a[10][20];
+ll gcd(ll a, ll b){
+	if(a==0)
+		return b;
+	return gcd(b % a, a);
+}
+
+ll lcm(ll a, ll b){
+	return (a * b) / gcd(a, b);
+}
+void run_case() {
+	ll n;
+	cin >> n;
+	if(n==1){
+		cout << 1 << "\n";
+		return;
+	}
+	ll x = 1LL * n * (n-1);
+	ll ans = x;
+	rng(i,1,n-1){
+		ans = max(ans, lcm(i,x));
+	}
+	ll ans1 = 1LL * (n-1) * (n-2);
+	x = ans1;
+	rng(i,1,n-2){
+		ans1 = max(ans1, lcm(i,x));
+	}
 	
-	a[0][1] = 1;
-	cout << a[0][1] << "\n";
+	cout << max(ans1, ans) << "\n";
+	
 }
  
 int main() {

@@ -16,27 +16,35 @@ using namespace std;
 #define rrng(i,a,b) for(int i=a;i>b;--i)
 #define ar array
 
-void run_case() {
-	// bitset<10> x[100];
-	
-	// x[0] = 30;
-	// x[1] = 55;
-	// cout << (x[0] ^ x[1]) << "\n";
+//Problem link: https://codeforces.com/problemset/problem/414/B
+ll dp[2005][2005] = {0};
+const int mod = 1e9 + 7;
 
-	bitset<100000> x; // 16 bytes
-	// 4*(10/W)
-	// 8*(10/64) = 8 bytes
-	// 8*(66/64)
-	// rep(i,5){
-	// 	int a;
-	// 	cin >> a;
-	// 	x[a]=true;
-	// }
-	// cout << sizeof(x) << "\n";
-	bitset<10> a[10][20];
+void run_case() {
+	int n,l;
+	cin >> n >> l;
+
+	rep(i,2005)
+		dp[i][1] = 1;
 	
-	a[0][1] = 1;
-	cout << a[0][1] << "\n";
+	for(int i=1;i<l;++i){
+		for(int j=1;j<=n;++j){
+			for(int k=j;k<=n;k+=j){
+				dp[k][i+1]+=dp[j][i];
+				if(dp[k][i+1] >= mod)
+					dp[k][i+1]-=mod;
+			}
+		}
+	}
+
+	ll ans = 0;
+	rng(i,1,n+1){
+		ans+=dp[i][l];
+		if(ans >= mod)
+			ans-=mod;
+	}
+	cout << ans << "\n";
+
 }
  
 int main() {

@@ -16,32 +16,48 @@ using namespace std;
 #define rrng(i,a,b) for(int i=a;i>b;--i)
 #define ar array
 
-void run_case() {
-	// bitset<10> x[100];
-	
-	// x[0] = 30;
-	// x[1] = 55;
-	// cout << (x[0] ^ x[1]) << "\n";
+//Problem link: https://codeforces.com/problemset/problem/1350/B
 
-	bitset<100000> x; // 16 bytes
-	// 4*(10/W)
-	// 8*(10/64) = 8 bytes
-	// 8*(66/64)
-	// rep(i,5){
-	// 	int a;
-	// 	cin >> a;
-	// 	x[a]=true;
-	// }
-	// cout << sizeof(x) << "\n";
-	bitset<10> a[10][20];
-	
-	a[0][1] = 1;
-	cout << a[0][1] << "\n";
+void run_case() {
+	int n;
+	cin >> n;
+	vector<int> sz(n+1);
+	rep(i,n){
+		cin >> sz[i+1];
+	}
+
+	vector<vector<int>> divs(n+1);
+	rng(i,1,n+1){
+		for(int j=1;j*j<=i;++j){
+			if((i%j)==0){
+				divs[i].pb(j);
+				if((i/j) != j)
+					divs[i].pb(i/j);
+			}
+		}
+	}
+
+	vector<int> dp(n+1, 1);
+	for(int i=2;i<=n;i++){
+		for(int x: divs[i]){
+			if(sz[x] < sz[i])
+				dp[i] = max(dp[i], dp[x] + 1);
+		}
+	}
+
+	int ans = 1;	
+	rng(i,2,n+1){
+		ans = max(ans, dp[i]);
+	}
+
+	cout << ans << "\n";
+
 }
  
 int main() {
   fast;
-  int t = 1;
+  int t;
+	cin >> t;
   while(t--){
     run_case();
   }
