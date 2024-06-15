@@ -16,33 +16,28 @@ using namespace std;
 #define rrng(i,a,b) for(int i=a;i>b;--i)
 #define ar array
 
+//Problem link: https://atcoder.jp/contests/dp/tasks/dp_l
+
+ll solve(int i, int j, vector<int> &a, vector<vector<ll>> &dp){
+	if(i>j)
+		return 0;
+	if(dp[i][j]!=-1)
+		return dp[i][j];
+	ll ans = 0;
+	
+	ans = max(a[i] - solve(i+1,j,a,dp), a[j] - solve(i,j-1,a,dp));
+	
+	return dp[i][j] = ans;
+}
+
 void run_case() {
-	// bitset<10> x[100];
-	
-	// x[0] = 30;
-	// x[1] = 55;
-	// cout << (x[0] ^ x[1]) << "\n";
-
-	bitset<100000> x; // 16 bytes
-	//
-	// 4*(10/W)
-	// 8*(10/64) = 8 bytes
-	// 8*(66/64)
-	// rep(i,5){
-	// 	int a;
-	// 	cin >> a;
-	// 	x[a]=true;
-	// }
-	//cout << sizeof(x) << "\n";
-	bitset<10> a[10][20];
-	
-	cout << ((11 >> 1) << 1) << endl;
-	a[0][1] = 1;
-	cout << a[0][1] << "\n";
-
-	bitset<8> xx("1101010");
-	bitset<8> y = xx >> 1;
-	cout << y << " " << xx[0] << endl;
+  int n;
+	cin >> n;
+	vector<int> a(n);
+	rep(i,n)
+		cin >> a[i];
+	vector<vector<ll>> dp(n, vector<ll>(n, -1));
+	cout << solve(0,n-1,a,dp) << "\n";
 }
  
 int main() {

@@ -17,32 +17,41 @@ using namespace std;
 #define ar array
 
 void run_case() {
-	// bitset<10> x[100];
-	
-	// x[0] = 30;
-	// x[1] = 55;
-	// cout << (x[0] ^ x[1]) << "\n";
+  int n,m;
+	cin >> n >> m;
+	vector<int> g[n];
+	vector<int> in(n,0);
+	rep(i,m){
+		int a,b;
+		cin >> a >> b;
+		--a,--b;
+		g[a].pb(b);
+		++in[b];
+	}
+	queue<int> q;
 
-	bitset<100000> x; // 16 bytes
-	//
-	// 4*(10/W)
-	// 8*(10/64) = 8 bytes
-	// 8*(66/64)
-	// rep(i,5){
-	// 	int a;
-	// 	cin >> a;
-	// 	x[a]=true;
-	// }
-	//cout << sizeof(x) << "\n";
-	bitset<10> a[10][20];
-	
-	cout << ((11 >> 1) << 1) << endl;
-	a[0][1] = 1;
-	cout << a[0][1] << "\n";
-
-	bitset<8> xx("1101010");
-	bitset<8> y = xx >> 1;
-	cout << y << " " << xx[0] << endl;
+	rep(i,n){
+		if(in[i]==0){
+			q.push(i);
+		}
+	}
+	vector<int> topo_sort;
+	while(!q.empty()){
+		int u = q.front();
+		topo_sort.pb(u);
+		q.pop();
+		for(int v: g[u]){
+			--in[v];
+			if(in[v]==0)
+				q.push(v);
+		}
+	}
+	if((int)topo_sort.size()==n){
+		for(int x: topo_sort)
+			cout << x + 1 << " ";
+	} else {
+		cout << "IMPOSSIBLE" << "\n";
+	}
 }
  
 int main() {
