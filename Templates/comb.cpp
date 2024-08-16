@@ -15,6 +15,11 @@ long long exp(long long x, long long n, long long m) {
 	return res;
 }
 
+//length of number.
+int numberLength(ll number) {
+    return (number == 0) ? 1 : log10(llabs(number)) + 1;
+}
+
 /** Precomputes n! from 0 to MAXN. */
 void factorial(long long p) {
 	fac[0] = 1;

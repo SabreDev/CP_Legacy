@@ -7,7 +7,7 @@ using namespace std;
 #define S second
 #define pb push_back
 #define mp make_pair
-#define pi pair<int,int>
+#define pi pair<ll,ll>
 #define pii pair<int,pi>
 #define rep(i,n) for(int i=0;i<n;i++)
 #define rrep(i,n) for(int i=n-1;i>=0;--i)
@@ -15,43 +15,65 @@ using namespace std;
 #define rng(i,a,b) for(int i=a;i<b;i++)
 #define rrng(i,a,b) for(int i=a;i>b;--i)
 #define ar array
-const int INF = 2e9;
 
+//https://codeforces.com/gym/102951/problem/C
+class FenwickTree{
+  int n;
+  vector<int> tree;
+  public:
+    FenwickTree(int sz){
+      n = sz + 1;
+      tree.resize(n, 0);
+    }
+    int read(int idx){
+      ++idx;
+      int val = 0;
+      while(idx>0){
+        val = max(val, tree[idx]);
+        idx-=(idx&-idx);
+      }
+      return val;
+    }
+    void update(int idx, int val){
+      ++idx;
+      while(idx<=n){
+        tree[idx]=max(tree[idx], val);
+        idx+=(idx&-idx);
+      }
+    }
+};
 void run_case() {
-	int n;
-	cin >> n;
-	vector<int> a(n), b(n);
-	vector<int> pos(n+1);
+ int n;
+ cin >> n;
+ vector<int> a(n), b(n), idx(n), c(n);
+ rep(i,n){
+  cin >> a[i];
+  --a[i];
+  idx[a[i]] = i;
+ }
+ rep(i,n){
+  cin >> b[i];
+  --b[i];
+  c[i] = idx[b[i]];
+ }
 
-	rep(i,n)
-		cin >> a[i];
-	rep(i,n){
-		cin >> b[i];
-		pos[b[i]] = i;
-	}
-
-	vector<int> dp(n+1, 1);
-	set<int> seen;
-
-	rep(i,n){
-		int idx = pos[a[i]];
-		seen.insert(idx);
-		auto j = seen.lower_bound(idx);
-		auto en = --seen.end();
-		if(j!=seen.begin()){
-			--j;
-			dp[b[idx]] = max({dp[b[idx]], dp[b[*j]] + 1, i>0 ? dp[a[i-1]] : 0, dp[b[*en]]});
-		} else {
-			dp[b[idx]] = max({1, i>0 ? dp[a[i-1]] : 0, dp[b[*en]]});
-		}
-	}
-	cout << *max_element(all(dp)) << "\n";
-
+ //LIS on C
+ FenwickTree* BIT = new FenwickTree(n);
+ rep(i,n){
+  int now = BIT->read(c[i]-1);
+  BIT->update(c[i], now+1);
+ }
+ int ans = 1;
+ rep(i,n){
+  ans = max(ans, BIT->read(c[i]));
+ }
+ cout << ans << "\n";
 }
-
-int main(){
-	fast;
+ 
+int main() {
+  fast;
   int t = 1;
-  while(t--)
-		run_case();
+  while(t--){
+    run_case();
+  }
 }
